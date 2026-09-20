@@ -1,0 +1,12 @@
+/* Дополнительные стили проекта PRO Монтаж.
+   Основная сетка и оформление собраны на Tailwind (см. templates/base.html),
+   здесь — только то, что удобнее держать в отдельном файле. */
+
+@media print {
+    aside, .no-print { display: none !important; }
+    .card { border: none !important; box-shadow: none !important; }
+    body { background: #fff !important; }
+}
+
+/* Плавная прокрутка по якорям */
+html { scroll-behavior: smooth; }

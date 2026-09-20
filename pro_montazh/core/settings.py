@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-change-this-key-to-your-own-secret-key-in-producti
 # Отладка включена для локальной разработки
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '[::1]', '0.0.0.0']
 
 
 # ==============================================================================
@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'orders.context_processors.unread_notifications',
             ],
         },
     },
@@ -96,8 +97,13 @@ DATABASES = {
 AUTH_USER_MODEL = 'users.User'
 
 # Куда перенаправлять после входа/выхода
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailOrUsernameBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = 'login'
 
 
@@ -135,7 +141,7 @@ USE_TZ = True
 
 
 # ==============================================================================
-# СТАРИКА И МЕДИАФАЙЛЫ (CSS, JS, Загрузки)
+# СТАТИКА И МЕДИАФАЙЛЫ (CSS, JS, Загрузки)
 # ==============================================================================
 
 # Настройки статических файлов (CSS, JavaScript, Images)
@@ -155,3 +161,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # ==============================================================================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==============================================================================
+# ЗАГРУЗКА ФАЙЛОВ
+# ==============================================================================
+
+# Максимальный размер файла, который магазин может прикрепить к заявке (20 МБ)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

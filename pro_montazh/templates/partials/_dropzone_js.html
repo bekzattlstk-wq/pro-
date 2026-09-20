@@ -1,0 +1,40 @@
+<script>
+    (function () {
+        const dropzone = document.getElementById('dropzone');
+        const input = document.getElementById('file-input');
+        const text = document.getElementById('dropzone-text');
+        if (!dropzone || !input) return;
+
+        const describe = (files) => {
+            if (!files || !files.length) {
+                text.textContent = 'Добавьте файл загрузив по клику или перетащив его в область';
+                return;
+            }
+            const names = Array.from(files).map((f) => f.name);
+            text.textContent = names.length === 1
+                ? 'Выбран файл: ' + names[0]
+                : 'Выбрано файлов: ' + names.length + ' (' + names.join(', ') + ')';
+        };
+
+        input.addEventListener('change', () => describe(input.files));
+
+        ['dragenter', 'dragover'].forEach((evt) =>
+            dropzone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('is-dragover');
+            })
+        );
+        ['dragleave', 'drop'].forEach((evt) =>
+            dropzone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('is-dragover');
+            })
+        );
+        dropzone.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files.length) {
+                input.files = e.dataTransfer.files;
+                describe(input.files);
+            }
+        });
+    })();
+</script>

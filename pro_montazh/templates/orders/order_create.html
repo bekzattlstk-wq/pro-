@@ -1,0 +1,233 @@
+{% extends 'app_base.html' %}
+
+{% block title %}Новая заявка | PRO Монтаж{% endblock %}
+
+{% block content %}
+<a href="{% url 'order_list' %}"
+   class="inline-flex items-center gap-2 text-[12.5px] font-semibold text-gray-700 hover:text-brand-red mb-4">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" class="w-4 h-4">
+        <path d="M14 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    К заявкам
+</a>
+
+<form method="post" enctype="multipart/form-data" class="space-y-5" novalidate>
+    {% csrf_token %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+
+        <!-- Информация о заказе -->
+        <section class="card p-5 space-y-3">
+            <div class="flex items-start justify-between gap-3 mb-1">
+                <div>
+                    <h1 class="text-base font-extrabold">Новая заявка</h1>
+                    <p class="text-[11px] text-gray-400">Информация о заказе</p>
+                </div>
+                <div class="text-right text-[11px] text-gray-600 space-y-1">
+                    <p class="font-semibold">{{ user.manager_full_name|default:user.display_name }}</p>
+                    <p>{{ user.phone|default:"—" }}</p>
+                </div>
+            </div>
+
+            <div class="field-card">
+                <label for="id_order_type">Тип заявки</label>
+                <select name="order_type" id="id_order_type">
+                    {% for value, label in form.fields.order_type.choices %}
+                        <option value="{{ value }}" {% if form.order_type.value == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field-card">
+                <label for="id_city">Город</label>
+                <input type="text" name="city" id="id_city" required placeholder="г. Москва"
+                       value="{{ form.city.value|default:'' }}">
+            </div>
+
+            <div class="field-card">
+                <label for="id_street">Улица</label>
+                <input type="text" name="street" id="id_street" required placeholder="ул. Спиридоновка"
+                       value="{{ form.street.value|default:'' }}">
+            </div>
+
+            <div class="field-card">
+                <label for="id_house">Дом</label>
+                <input type="text" name="house" id="id_house" required placeholder="25/20с1"
+                       value="{{ form.house.value|default:'' }}">
+            </div>
+
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p class="text-[11px] text-red-600 px-1">{{ field.label }}: {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </section>
+
+        <!-- Комментарий -->
+        <section class="card p-5">
+            <h2 class="text-[13px] font-extrabold mb-1">Комментарий</h2>
+            <p class="text-[11px] text-gray-400 mb-3">Опишите объект, количество дверей и пожелания</p>
+            <textarea name="comment" id="id_comment" rows="10"
+                      class="w-full text-[12.5px] leading-relaxed bg-[#F7F8FA] rounded-xl p-3 outline-none
+                             focus:bg-white focus:ring-1 focus:ring-[#E9EBEF] resize-none"
+                      placeholder="Например: монтаж 4 межкомнатных дверей, телескопический наличник">{{ form.comment.value|default:'' }}</textarea>
+        </section>
+
+        <!-- Календарь -->
+        <section class="card p-5">
+            <div class="mb-3">
+                <span class="field-label">Дата выполнения</span>
+                <p class="text-[12.5px] font-semibold text-brand-red" id="range-label">Выберите даты в календаре</p>
+            </div>
+
+            <input type="hidden" name="date_from" id="id_date_from" value="{{ form.date_from.value|default:'' }}">
+            <input type="hidden" name="date_to" id="id_date_to" value="{{ form.date_to.value|default:'' }}">
+
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-extrabold" id="cal-title">Январь</h3>
+                <div class="flex gap-1">
+                    <button type="button" id="cal-prev" class="w-7 h-7 rounded-lg hover:bg-[#F7F8FA] flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <path d="M14 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button type="button" id="cal-next" class="w-7 h-7 rounded-lg hover:bg-[#F7F8FA] flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <path d="M10 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-1 text-center text-[10.5px] font-semibold text-gray-400 mb-1">
+                <span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>вс</span>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center" id="cal-grid"></div>
+
+            <p class="text-[10.5px] text-gray-400 mt-3">
+                Нажмите на первую и последнюю дату, чтобы выбрать промежуток.
+            </p>
+        </section>
+    </div>
+
+    <!-- Файлы -->
+    <section class="card p-5">
+        <label class="dropzone flex flex-col items-center justify-center text-center h-[200px] px-6" id="dropzone">
+            <input type="file" name="files" id="file-input" multiple class="hidden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C6CBD3" stroke-width="1.5" class="w-9 h-9 mb-3">
+                <path d="M12 16V5m0 0L8 9m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 17v2.5h16V17" stroke-linecap="round"/>
+            </svg>
+            <span class="text-[12.5px] text-gray-400" id="dropzone-text">
+                Добавьте файл загрузив по клику или перетащив его в область
+            </span>
+        </label>
+    </section>
+
+    <div class="flex justify-center pb-4">
+        <button type="submit" class="btn-brand px-9 py-2.5 rounded-lg font-bold text-[11.5px] shadow-md">
+            Создать заявку
+        </button>
+    </div>
+</form>
+
+{% include 'partials/_dropzone_js.html' %}
+
+<script>
+    (function () {
+        const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        const grid = document.getElementById('cal-grid');
+        const title = document.getElementById('cal-title');
+        const label = document.getElementById('range-label');
+        const fromInput = document.getElementById('id_date_from');
+        const toInput = document.getElementById('id_date_to');
+
+        const parse = (value) => (value ? new Date(value + 'T00:00:00') : null);
+        const iso = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')
+                           + '-' + String(d.getDate()).padStart(2, '0');
+        const human = (d) => String(d.getDate()).padStart(2, '0') + '.'
+                             + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear();
+
+        let from = parse(fromInput.value);
+        let to = parse(toInput.value);
+        let cursor = from ? new Date(from) : new Date();
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+
+        function updateLabel() {
+            if (from && to) label.textContent = human(from) + ' - ' + human(to);
+            else if (from) label.textContent = human(from) + ' - ...';
+            else label.textContent = 'Выберите даты в календаре';
+        }
+
+        function render() {
+            title.textContent = MONTHS[cursor.getMonth()] + ' ' + cursor.getFullYear();
+            grid.innerHTML = '';
+
+            const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+            const offset = (first.getDay() + 6) % 7; // неделя начинается с понедельника
+            const start = new Date(first);
+            start.setDate(first.getDate() - offset);
+
+            for (let i = 0; i < 42; i++) {
+                const day = new Date(start);
+                day.setDate(start.getDate() + i);
+
+                const cell = document.createElement('button');
+                cell.type = 'button';
+                cell.textContent = day.getDate();
+                cell.className = 'h-8 rounded-lg text-[11.5px] font-semibold transition';
+
+                const otherMonth = day.getMonth() !== cursor.getMonth();
+                const weekend = day.getDay() === 0 || day.getDay() === 6;
+                const past = day < today;
+
+                if (otherMonth) cell.className += ' text-gray-300';
+                else if (weekend) cell.className += ' text-brand-red';
+                else cell.className += ' text-gray-700';
+
+                if (past) {
+                    cell.className += ' opacity-40 cursor-not-allowed';
+                    cell.disabled = true;
+                } else {
+                    cell.className += ' hover:bg-[#F1F5F9]';
+                }
+
+                const time = day.getTime();
+                const inRange = from && to && time >= from.getTime() && time <= to.getTime();
+                const isEdge = (from && time === from.getTime()) || (to && time === to.getTime());
+                if (isEdge) cell.className += ' bg-emerald-400 text-white';
+                else if (inRange) cell.className += ' bg-emerald-100 text-emerald-700';
+
+                cell.addEventListener('click', function () {
+                    if (!from || (from && to)) {
+                        from = day; to = null;
+                    } else if (day.getTime() < from.getTime()) {
+                        to = from; from = day;
+                    } else {
+                        to = day;
+                    }
+                    fromInput.value = from ? iso(from) : '';
+                    toInput.value = to ? iso(to) : '';
+                    updateLabel();
+                    render();
+                });
+
+                grid.appendChild(cell);
+            }
+        }
+
+        document.getElementById('cal-prev').addEventListener('click', function () {
+            cursor = new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1);
+            render();
+        });
+        document.getElementById('cal-next').addEventListener('click', function () {
+            cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+            render();
+        });
+
+        updateLabel();
+        render();
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+<section class="relative hidden lg:block min-h-screen overflow-hidden bg-[#EFEAE4]">
+    <!-- Запасная иллюстрация: видна, если фотография не загрузилась -->
+    <svg viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice"
+         class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        <rect width="600" height="800" fill="#EFE9E3"/>
+        <rect y="620" width="600" height="180" fill="#E0D5C8"/>
+        <rect x="150" y="150" width="230" height="470" rx="4" fill="#FBF9F7" stroke="#DCD3C8" stroke-width="3"/>
+        <rect x="170" y="175" width="190" height="180" rx="3" fill="#F3EFEA"/>
+        <rect x="170" y="380" width="190" height="215" rx="3" fill="#F3EFEA"/>
+        <rect x="333" y="385" width="26" height="7" rx="3.5" fill="#2B2B2B"/>
+        <rect x="420" y="330" width="120" height="180" rx="60" fill="#EDE3D6" stroke="#DCD3C8" stroke-width="3"/>
+        <path d="M455 510c0-45 10-95 25-130 15 35 25 85 25 130z" fill="#D9CDBC"/>
+        <rect x="40" y="560" width="80" height="60" rx="4" fill="#C8A87F"/>
+    </svg>
+
+    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600&auto=format&fit=crop"
+         alt="Интерьер с дверью" class="absolute inset-0 w-full h-full object-cover"
+         onerror="this.style.display='none'">
+
+    <div class="absolute top-7 left-7 z-10">
+        {% include 'partials/_logo.html' with size='w-9 h-9' %}
+    </div>
+</section>

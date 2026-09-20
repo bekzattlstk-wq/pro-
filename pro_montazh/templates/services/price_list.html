@@ -1,0 +1,28 @@
+{% extends 'app_base.html' %}
+
+{% block title %}Прайс-лист | PRO Монтаж{% endblock %}
+
+{% block content %}
+<section class="card p-5 min-h-[calc(100vh-88px)]">
+    <div class="flex items-center justify-between mb-4">
+        <a href="{% url 'price_list_download' %}"
+           class="btn-outline px-5 py-2 rounded-xl text-[11.5px] font-semibold">
+            Скачать прайс лист
+        </a>
+        <span class="text-[11px] text-gray-400">Цены указаны за единицу работы</span>
+    </div>
+
+    <div class="divide-y divide-[#F2F3F5]">
+        {% for item in items %}
+            <div class="flex items-center justify-between gap-4 px-3 py-3 hover:bg-[#FAFAFB] rounded-lg transition">
+                <span class="text-[12.5px] text-gray-800">{{ item.title }}</span>
+                <span class="text-[12.5px] font-semibold text-gray-900 shrink-0">
+                    {{ item.price|floatformat:2 }} р.
+                </span>
+            </div>
+        {% empty %}
+            <p class="text-xs text-gray-400 py-16 text-center">Прайс-лист пока не заполнен.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

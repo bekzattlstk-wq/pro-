@@ -1,0 +1,26 @@
+{% extends 'app_base.html' %}
+
+{% block title %}Активные заявки | PRO Монтаж{% endblock %}
+
+{% block content %}
+<section class="card p-5 min-h-[calc(100vh-88px)]">
+    <div class="flex items-center justify-between mb-2 px-1">
+        <h1 class="text-[13px] font-bold">{% if show_all %}Все заявки{% else %}Активные заявки{% endif %}</h1>
+        <a href="{% if show_all %}{% url 'order_list' %}{% else %}?all=1{% endif %}"
+           class="text-[11px] font-semibold text-brand-red hover:underline">
+            {% if show_all %}Только активные{% else %}Показать все заявки{% endif %}
+        </a>
+    </div>
+
+    <div class="divide-y divide-[#F2F3F5]">
+        {% for order in orders %}
+            {% include 'partials/_order_row.html' %}
+        {% empty %}
+            <p class="text-xs text-gray-400 py-16 text-center">
+                Заявок пока нет.
+                <a href="{% url 'order_create' %}" class="text-brand-red font-semibold">Создать первую заявку</a>
+            </p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

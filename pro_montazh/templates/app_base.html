@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="min-h-screen bg-[#F2F3F5] flex">
+
+    <!-- Боковое меню -->
+    <aside class="w-[72px] shrink-0 bg-white border-r border-[#EDEFF3] flex flex-col items-center py-5 sticky top-0 h-screen">
+        <a href="{% url 'profile' %}" class="mb-7" title="PRO Монтаж">
+            {% include 'partials/_logo.html' with size='w-7 h-7' %}
+        </a>
+
+        <nav class="flex flex-col items-center gap-2 flex-1">
+            <a href="{% url 'profile' %}" title="Личный кабинет"
+               class="nav-item {% if active_tab == 'profile' %}nav-active{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
+                    <circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c0-3.6 3.4-5.6 7.5-5.6s7.5 2 7.5 5.6"/>
+                </svg>
+            </a>
+
+            <a href="{% url 'order_list' %}" title="Активные заявки"
+               class="nav-item {% if active_tab == 'orders' %}nav-active{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
+                    <rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/>
+                    <rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>
+                </svg>
+            </a>
+
+            <a href="{% url 'order_create' %}" title="Создать заявку"
+               class="nav-item {% if active_tab == 'create' %}nav-active{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" class="w-5 h-5">
+                    <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
+                </svg>
+            </a>
+
+            <a href="{% url 'price_list' %}" title="Прайс-лист"
+               class="nav-item {% if active_tab == 'price' %}nav-active{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="w-5 h-5">
+                    <path d="M6 3h8l4 4v14H6z" stroke-linejoin="round"/><path d="M14 3v4h4" stroke-linejoin="round"/>
+                    <path d="M9 12h6M9 16h6" stroke-linecap="round"/>
+                </svg>
+            </a>
+
+            <a href="{% url 'order_search' %}" title="Поиск заявки"
+               class="nav-item {% if active_tab == 'search' %}nav-active{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="w-5 h-5">
+                    <circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5" stroke-linecap="round"/>
+                </svg>
+            </a>
+
+            <a href="{% url 'notifications' %}" title="Уведомления"
+               class="nav-item relative {% if active_tab == 'notifications' %}nav-active{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="w-5 h-5">
+                    <path d="M18 15.5V10a6 6 0 1 0-12 0v5.5L4.5 18h15z" stroke-linejoin="round"/>
+                    <path d="M9.8 20.5a2.4 2.4 0 0 0 4.4 0" stroke-linecap="round"/>
+                </svg>
+                {% if unread_notifications_count %}
+                    <span class="absolute top-1.5 right-1.5 w-[15px] h-[15px] rounded-full bg-brand-red text-white
+                                 text-[9px] font-bold flex items-center justify-center">
+                        {{ unread_notifications_count }}
+                    </span>
+                {% endif %}
+            </a>
+        </nav>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" title="Выйти"
+                    class="w-10 h-10 rounded-xl btn-brand flex items-center justify-center">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" class="w-5 h-5">
+                    <path d="M15 4h4v16h-4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 8.5 6.5 12 10 15.5M6.5 12H15" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </form>
+    </aside>
+
+    <!-- Контент -->
+    <main class="flex-1 min-w-0 p-5 sm:p-7">
+        {% include 'partials/_messages.html' %}
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<style>
+    .nav-item {
+        width: 40px; height: 40px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        color: #9AA1AC; transition: all .18s ease; position: relative;
+    }
+    .nav-item:hover { color: #D80000; background: #FFF4F4; }
+    .nav-active { color: #D80000; background: #FFF1F1; }
+    .nav-active::after {
+        content: ''; position: absolute; right: -17px; top: 8px;
+        width: 3px; height: 24px; border-radius: 3px; background: #D80000;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'app_base.html' %}
+
+{% block title %}Уведомления | PRO Монтаж{% endblock %}
+
+{% block content %}
+<section class="card p-5 min-h-[calc(100vh-88px)]">
+    <h1 class="text-[13px] font-bold mb-3 px-1">Уведомления по заявкам</h1>
+
+    <div class="divide-y divide-[#F2F3F5]">
+        {% for item in notifications %}
+            <div class="flex items-start gap-3.5 px-2 py-3 {% if not item.is_read %}bg-[#FFFBFB]{% endif %} rounded-xl">
+                <span class="w-9 h-9 shrink-0 rounded-lg border border-[#F0D2D2] bg-[#FFF6F6] flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#D80000" stroke-width="1.7" class="w-4 h-4">
+                        <path d="M15.5 4.2a4.6 4.6 0 0 0-6 5.9l-5.1 5.1a1.6 1.6 0 0 0 0 2.3l2.1 2.1a1.6 1.6 0 0 0 2.3 0l5.1-5.1a4.6 4.6 0 0 0 5.9-6l-2.7 2.7-2.3-.6-.6-2.3z"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </span>
+
+                <div class="min-w-0 flex-1">
+                    <p class="text-[12px] font-semibold text-gray-900">{{ item.text }}</p>
+                    {% if item.order %}
+                        <a href="{% url 'order_detail' item.order.number %}"
+                           class="text-[11px] font-bold text-gray-700 hover:text-brand-red">{{ item.order.number }}</a>
+                        <p class="text-[11px] text-gray-500">{{ item.order.get_order_type_display }} дверей</p>
+                    {% endif %}
+                </div>
+
+                <div class="text-right shrink-0">
+                    <p class="text-[11.5px] font-semibold text-gray-700">{{ item.created_at|date:"d.m.Y" }}</p>
+                    {% if item.order %}
+                        <p class="text-[11px] font-semibold {{ item.order.status_color }}">
+                            {{ item.order.get_status_display }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-xs text-gray-400 py-16 text-center">Уведомлений пока нет.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

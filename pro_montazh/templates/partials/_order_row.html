@@ -1,0 +1,23 @@
+<a href="{% url 'order_detail' order.number %}"
+   class="flex items-center gap-3.5 px-2 py-2.5 rounded-xl hover:bg-[#FAFAFB] transition">
+    <span class="w-9 h-9 shrink-0 rounded-lg border border-[#F0D2D2] bg-[#FFF6F6] flex items-center justify-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#D80000" stroke-width="1.7" class="w-4 h-4">
+            <path d="M15.5 4.2a4.6 4.6 0 0 0-6 5.9l-5.1 5.1a1.6 1.6 0 0 0 0 2.3l2.1 2.1a1.6 1.6 0 0 0 2.3 0l5.1-5.1a4.6 4.6 0 0 0 5.9-6l-2.7 2.7-2.3-.6-.6-2.3z"
+                  stroke-linejoin="round"/>
+        </svg>
+    </span>
+
+    <span class="min-w-0 flex-1">
+        <span class="block text-[12.5px] font-bold text-gray-900 truncate">{{ order.number }}</span>
+        <span class="block text-[11px] text-gray-500">{{ order.get_order_type_display }} дверей</span>
+    </span>
+
+    <span class="text-right shrink-0">
+        <span class="block text-[11.5px] font-semibold text-gray-700">
+            {{ order.scheduled_date|default:order.created_at|date:"d.m.Y" }}
+        </span>
+        <span class="block text-[11px] font-semibold {{ order.status_color }}">
+            {{ order.get_status_display }}
+        </span>
+    </span>
+</a>

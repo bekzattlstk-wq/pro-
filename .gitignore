@@ -1,8 +1,10 @@
-.idea/
 __pycache__/
-*.pyc
+*.py[cod]
 .venv/
-.idea/
-__pycache__/
-*.pyc
 venv/
+db.sqlite3
+media/
+staticfiles/
+.idea/
+.DS_Store
+node_modules/

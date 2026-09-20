@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация | PRO Монтаж{% endblock %}
+
+{% block body %}
+<div class="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+
+    <!-- Левый баннер -->
+    {% include 'partials/_auth_banner.html' %}
+
+    <!-- Правая форма -->
+    <section class="flex flex-col justify-between p-6 sm:p-10 lg:p-14 bg-white min-h-screen">
+        <div class="flex items-center justify-between w-full">
+            <div class="lg:hidden">{% include 'partials/_logo.html' with size='w-8 h-8' %}</div>
+            <a href="{% url 'login' %}"
+               class="btn-outline ml-auto px-6 py-2 rounded-xl text-xs font-semibold tracking-wide">
+                Авторизация
+            </a>
+        </div>
+
+        <div class="w-full max-w-sm mx-auto my-auto py-8">
+            <h1 class="text-center text-xl sm:text-2xl font-extrabold tracking-tight leading-snug mb-8">
+                Добро пожаловать в службу<br>
+                <span class="text-brand-red">сервиса PRO Монтаж.</span>
+            </h1>
+
+            <h2 class="text-center font-bold text-base mb-5">Регистрация</h2>
+
+            {% if form.errors %}
+                <div class="p-3 mb-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-semibold space-y-1">
+                    {% for field in form %}
+                        {% for error in field.errors %}<p>{{ field.label }}: {{ error }}</p>{% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-3.5" novalidate>
+                {% csrf_token %}
+
+                <div class="field-card auth-field">
+                    <label for="id_store_name">Название магазина</label>
+                    <input type="text" name="store_name" id="id_store_name" required
+                           placeholder="Например: Академия дверей"
+                           value="{{ form.store_name.value|default:'' }}">
+                </div>
+
+                <div class="field-card auth-field">
+                    <label for="id_manager_full_name">ФИО менеджера</label>
+                    <input type="text" name="manager_full_name" id="id_manager_full_name" required
+                           placeholder="Иванович Иван Иванов"
+                           value="{{ form.manager_full_name.value|default:'' }}">
+                </div>
+
+                <div class="field-card auth-field">
+                    <label for="id_phone">Контактный телефон</label>
+                    <input type="tel" name="phone" id="id_phone" required
+                           placeholder="+7 (999) 999-99-99"
+                           value="{{ form.phone.value|default:'' }}">
+                </div>
+
+                <div class="field-card auth-field">
+                    <label for="id_email">Email</label>
+                    <input type="email" name="email" id="id_email" required
+                           placeholder="ivan@gmail.com"
+                           value="{{ form.email.value|default:'' }}">
+                </div>
+
+                <div class="field-card auth-field">
+                    <label for="id_password">Пароль</label>
+                    <input type="password" name="password" id="id_password" required
+                           placeholder="Минимум 8 символов">
+                </div>
+
+                <div class="pt-5 flex justify-center">
+                    <button type="submit" class="btn-brand px-12 py-2.5 rounded-lg font-bold text-xs shadow-md">
+                        Войти
+                    </button>
+                </div>
+
+                <p class="text-center text-[10.5px] text-gray-400 pt-1">
+                    Входить в кабинет можно по email или по логину, который выдаётся после регистрации.
+                </p>
+            </form>
+        </div>
+
+        <p class="text-center text-[11px] text-gray-400">
+            &copy; {% now "Y" %} PRO Монтаж. Сервисная служба установки дверей.
+        </p>
+    </section>
+</div>
+{% endblock %}
