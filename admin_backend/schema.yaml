@@ -1,0 +1,1536 @@
+openapi: 3.0.3
+info:
+  title: Orders API
+  version: 1.0.0
+  description: API менеджера и администратора
+paths:
+  /api/admin/dashboard/:
+    get:
+      operationId: admin_dashboard_retrieve
+      tags:
+      - admin
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+  /api/admin/employees/:
+    get:
+      operationId: admin_employees_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmployeeList'
+          description: ''
+  /api/admin/orders/:
+    get:
+      operationId: admin_orders_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - admin
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminOrderList'
+          description: ''
+    post:
+      operationId: admin_orders_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+  /api/admin/orders/{id}/:
+    get:
+      operationId: admin_orders_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - admin
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+    put:
+      operationId: admin_orders_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+    patch:
+      operationId: admin_orders_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminOrder'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+    delete:
+      operationId: admin_orders_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - admin
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/admin/orders/{id}/comment/:
+    post:
+      operationId: admin_orders_comment_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminOrder'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+  /api/admin/orders/{id}/history/:
+    get:
+      operationId: admin_orders_history_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - admin
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrder'
+          description: ''
+  /api/logout/:
+    post:
+      operationId: logout_create
+      tags:
+      - logout
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/me/:
+    get:
+      operationId: me_retrieve
+      tags:
+      - me
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+          description: ''
+    patch:
+      operationId: me_partial_update
+      tags:
+      - me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedManager'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedManager'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedManager'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+          description: ''
+  /api/me/password/:
+    post:
+      operationId: me_password_create
+      tags:
+      - me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Password'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Password'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Password'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Password'
+          description: ''
+  /api/notifications/:
+    get:
+      operationId: notifications_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - notifications
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationList'
+          description: ''
+  /api/notifications/{id}/:
+    get:
+      operationId: notifications_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - notifications
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/{id}/mark-read/:
+    post:
+      operationId: notifications_mark_read_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/mark-all-read/:
+    post:
+      operationId: notifications_mark_all_read_create
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/order-files/:
+    get:
+      operationId: order_files_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - order-files
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderFileList'
+          description: ''
+    post:
+      operationId: order_files_create
+      tags:
+      - order-files
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderFile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderFile'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFile'
+          description: ''
+  /api/order-files/{id}/:
+    get:
+      operationId: order_files_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order file.
+        required: true
+      tags:
+      - order-files
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFile'
+          description: ''
+    delete:
+      operationId: order_files_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order file.
+        required: true
+      tags:
+      - order-files
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/order-files/{id}/download/:
+    get:
+      operationId: order_files_download_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order file.
+        required: true
+      tags:
+      - order-files
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderFile'
+          description: ''
+  /api/orders/:
+    get:
+      operationId: orders_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - orders
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: orders_create
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - orders
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    put:
+      operationId: orders_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: orders_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: orders_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - orders
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - ht
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/token/:
+    post:
+      operationId: token_create
+      tags:
+      - token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+components:
+  schemas:
+    AdminOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: string
+          readOnly: true
+          nullable: true
+        shop_name:
+          type: string
+          maxLength: 200
+        service_name:
+          type: string
+          maxLength: 200
+        customer_name:
+          type: string
+          maxLength: 200
+        customer_phone:
+          type: string
+          maxLength: 30
+        city:
+          type: string
+          maxLength: 100
+        street:
+          type: string
+          maxLength: 150
+        house:
+          type: string
+          maxLength: 50
+        customer_comment:
+          type: string
+        admin_comment:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        status_label:
+          type: string
+          readOnly: true
+        created_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        manager:
+          type: integer
+          nullable: true
+        installer:
+          type: integer
+          nullable: true
+        work_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_urgent:
+          type: boolean
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFile'
+          readOnly: true
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - comments
+      - created_at
+      - created_by
+      - customer_name
+      - customer_phone
+      - files
+      - id
+      - is_deleted
+      - number
+      - service_name
+      - shop_name
+      - status_label
+      - updated_at
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          type: integer
+          readOnly: true
+        author_name:
+          type: string
+          readOnly: true
+        text:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - author
+      - author_name
+      - created_at
+      - id
+      - text
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+      required:
+      - full_name
+      - id
+      - username
+    Manager:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+      required:
+      - id
+      - username
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - message
+      - order
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: string
+          readOnly: true
+          nullable: true
+        shop_name:
+          type: string
+          maxLength: 200
+        service_name:
+          type: string
+          maxLength: 200
+        customer_name:
+          type: string
+          maxLength: 200
+        customer_phone:
+          type: string
+          maxLength: 30
+        city:
+          type: string
+          maxLength: 100
+        street:
+          type: string
+          maxLength: 150
+        house:
+          type: string
+          maxLength: 50
+        customer_comment:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        status_label:
+          type: string
+          readOnly: true
+        created_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        manager:
+          type: integer
+          readOnly: true
+          nullable: true
+        installer:
+          type: integer
+          readOnly: true
+          nullable: true
+        work_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_urgent:
+          type: boolean
+          readOnly: true
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFile'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - customer_name
+      - customer_phone
+      - files
+      - id
+      - installer
+      - is_urgent
+      - manager
+      - number
+      - service_name
+      - shop_name
+      - status
+      - status_label
+      - updated_at
+    OrderFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+        file:
+          type: string
+          format: uri
+          writeOnly: true
+        file_name:
+          type: string
+          readOnly: true
+        source:
+          $ref: '#/components/schemas/SourceEnum'
+        uploaded_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - file
+      - file_name
+      - id
+      - order
+      - uploaded_at
+    PaginatedAdminOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminOrder'
+    PaginatedEmployeeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+    PaginatedNotificationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    PaginatedOrderFileList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFile'
+    PaginatedOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    Password:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+        new_password:
+          type: string
+          writeOnly: true
+      required:
+      - new_password
+      - old_password
+    PatchedAdminOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: string
+          readOnly: true
+          nullable: true
+        shop_name:
+          type: string
+          maxLength: 200
+        service_name:
+          type: string
+          maxLength: 200
+        customer_name:
+          type: string
+          maxLength: 200
+        customer_phone:
+          type: string
+          maxLength: 30
+        city:
+          type: string
+          maxLength: 100
+        street:
+          type: string
+          maxLength: 150
+        house:
+          type: string
+          maxLength: 50
+        customer_comment:
+          type: string
+        admin_comment:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        status_label:
+          type: string
+          readOnly: true
+        created_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        manager:
+          type: integer
+          nullable: true
+        installer:
+          type: integer
+          nullable: true
+        work_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_urgent:
+          type: boolean
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFile'
+          readOnly: true
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          readOnly: true
+        is_deleted:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedManager:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+    PatchedOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: string
+          readOnly: true
+          nullable: true
+        shop_name:
+          type: string
+          maxLength: 200
+        service_name:
+          type: string
+          maxLength: 200
+        customer_name:
+          type: string
+          maxLength: 200
+        customer_phone:
+          type: string
+          maxLength: 30
+        city:
+          type: string
+          maxLength: 100
+        street:
+          type: string
+          maxLength: 150
+        house:
+          type: string
+          maxLength: 50
+        customer_comment:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        status_label:
+          type: string
+          readOnly: true
+        created_by:
+          type: integer
+          readOnly: true
+          nullable: true
+        manager:
+          type: integer
+          readOnly: true
+          nullable: true
+        installer:
+          type: integer
+          readOnly: true
+          nullable: true
+        work_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_urgent:
+          type: boolean
+          readOnly: true
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderFile'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    SourceEnum:
+      enum:
+      - shop
+      - admin
+      - manager
+      - installer
+      type: string
+      description: |-
+        * `shop` - Магазин
+        * `admin` - Администратор
+        * `manager` - Менеджер
+        * `installer` - Монтажник
+    StatusEnum:
+      enum:
+      - new
+      - waiting_call
+      - waiting_service
+      - in_progress
+      - paused
+      - completed
+      - cancelled
+      type: string
+      description: |-
+        * `new` - Новая
+        * `waiting_call` - Ожидает звонок
+        * `waiting_service` - Ожидает услугу
+        * `in_progress` - В работе
+        * `paused` - Приостановлен
+        * `completed` - Завершён
+        * `cancelled` - Отменён
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
